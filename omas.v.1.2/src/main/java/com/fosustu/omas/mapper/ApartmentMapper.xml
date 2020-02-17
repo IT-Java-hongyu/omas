@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.ApartmentMapper">
+    <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.Apartment">
+        <id column="apart_id" property="apartId" jdbcType="VARCHAR"/>
+        <result column="apart_name" property="apartName" jdbcType="VARCHAR"/>
+        <result column="tag0" property="tag0" jdbcType="VARCHAR"/>
+        <result column="tag1" property="tag1" jdbcType="VARCHAR"/>
+        <result column="tag2" property="tag2" jdbcType="VARCHAR"/>
+        <result column="tag3" property="tag3" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="SearchBySymptoms" parameterType="InputForSearchDoctor" resultMap="BaseResultMap">
+        select * from apartment a
+        <where>
+            <if test="symptoms!= null and symptoms !=''">
+                a.typicalsymptom like concat('%','${symptoms}','%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getAllApartment" resultMap="BaseResultMap">
+        SELECT `apart_id`,
+               `apart_name`,
+               `tag0`,
+               `tag1`,
+               `tag2`,
+               `tag3`
+        FROM `omas`.`apartment`
+    </select>
+
+    <select id="SearchApartmentBySymptoms" parameterType="String" resultMap="BaseResultMap">
+        select * from apartment a, symptoms s
+        <where>
+            s.desc = #{symptoms}
+        </where>
+        limit 1
+    </select>
+    <select id="SearchApartmentByDocSpeciality" parameterType="String" resultMap="BaseResultMap">
+        select * from apartment a,doctor d
+        <where>
+            a.apart_id = d.apart_id
+            and d.synopsis like concat('%','${_parameter}','%')
+        </where>
+        limit 1
+    </select>
+    <select id="listByPage" resultMap="BaseResultMap">
+        SELECT `apart_id`,
+               `apart_name`,
+               `tag0`,
+               `tag1`,
+               `tag2`,
+               `tag3`
+        FROM `omas`.`apartment`
+        LIMIT #{currIndex}, #{rows};
+    </select>
+    <select id="getApartementById" parameterType="String" resultMap="BaseResultMap">
+        select *
+        from apartment
+        where apart_id = #{id}
+    </select>
+
+    <update id="updateApartmentById" parameterType="com.fosustu.omas.pojo.Apartment">
+        UPDATE
+            `omas`.`apartment`
+        SET `apart_name` = #{apartName},`tag0` = #{tag0},`tag1`=#{tag1},`tag2`=#{tag2},`tag3`=#{tag3}
+        WHERE `apart_id` = #{apartId}
+    </update>
+
+    <delete id="deleteApartmentById" parameterType="com.fosustu.omas.pojo.Apartment">
+        DELETE
+        FROM `omas`.`apartment`
+        WHERE `apart_id` = #{apartId}
+    </delete>
+
+    <insert id="addApartment" parameterType="com.fosustu.omas.pojo.Apartment">
+        INSERT INTO `omas`.`apartment` (`apart_id`, `apart_name`,`tag0`,`tag1`,`tag2`,`tag3`)
+        VALUES (#{apartId}, #{apartName},#{tag0},#{tag1},#{tag2},#{tag3});
+    </insert>
+
+    <select id="getCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM `omas`.`apartment`
+    </select>
+
+
+</mapper>

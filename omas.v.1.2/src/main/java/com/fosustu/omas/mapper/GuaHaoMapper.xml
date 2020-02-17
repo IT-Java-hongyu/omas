@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.GuaHaoMapper">
+    <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.GuaHao">
+        <id column="guahao_id" property="guahaoId"/>
+        <result column="apart_id" property="apartId" jdbcType="VARCHAR"/>
+        <result column="doctor_id" property="DoctorId" jdbcType="VARCHAR"/>
+        <result column="patient_id" property="patientId" jdbcType="VARCHAR"/>
+        <result column="guahao_biaozhi" property="guahaoBiaoZhi"/>
+        <result column="huahao_date" property="guahaoDate"/>
+    </resultMap>
+
+    <resultMap id="patientMap" type="com.fosustu.omas.pojo.Patient">
+        <id column="p_id" property="patientId" jdbcType="VARCHAR"/>
+        <result column="p_name" property="patientName" jdbcType="VARCHAR"/>
+        <result column="p_birthday" property="patientBirthday" jdbcType="INTEGER"/>
+        <result column="p_sex" property="patientSex" jdbcType="INTEGER"/>
+        <result column="p_address" property="patientAddress" jdbcType="VARCHAR"/>
+        <result column="p_marriage" property="patientMarriage" jdbcType="INTEGER"/>
+        <result column="p_phone" property="patientPhone" jdbcType="VARCHAR"/>
+        <result column="p_email" property="patientEmail" jdbcType="VARCHAR"/>
+        <result column="p_por" property="patientPor" jdbcType="VARCHAR"/>
+        <result column="card_id" property="cardId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="doctorMap" type="com.fosustu.omas.pojo.Doctor">
+        <id column="doc_id" property="docId" jdbcType="VARCHAR"/>
+        <result column="doc_name" property="docName" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="synopsis" property="synopsis" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="saveGuahao" parameterType="com.fosustu.omas.pojo.GuaHao">
+        INSERT INTO `omas`.`guahao` (`apart_id`,
+                                     `doctor_id`,
+                                     `patient_id`,
+                                     `guahao_biaozhi`,
+                                     `huahao_date`)
+        VALUES (#{apartId},
+                #{DoctorId},
+                #{patientId},
+                #{guahaoBiaoZhi},
+                #{guahaoDate});
+
+
+    </insert>
+
+    <select id="findGuahaoIdBypatientIdAndGuahaoBiaoZhi" parameterType="String" resultType="Integer">
+        SELECT `guahao_id`
+
+        FROM `omas`.`guahao`
+        WHERE patient_id = #{pid}
+          AND guahao_biaozhi = 1;
+    </select>
+
+    <select id="findPatientNum" resultType="Integer">
+        SELECT COUNT(*)
+        FROM `omas`.`guahao`
+        WHERE guahao_id &lt; #{param1}
+          AND guahao_biaozhi = 1
+          and doctor_id = #{param2}
+    </select>
+
+
+    <select id="jiaohao" parameterType="String" resultMap="patientMap">
+        SELECT p_id, p_name, p_birthday, p_sex, p_por
+        FROM patient
+        WHERE `p_id` =
+              (SELECT patient_id
+               FROM guahao
+               WHERE guahao_id =
+                     (SELECT MIN(guahao_id) FROM guahao WHERE guahao_biaozhi = 1 AND doctor_id = #{doctorId}))
+
+    </select>
+
+    <update id="changeGuaHaoStatus" parameterType="Integer">
+        UPDATE
+            `omas`.`guahao`
+        SET `guahao_biaozhi` = 0
+
+        WHERE `guahao_id` = #{guahaoId};
+    </update>
+
+    <select id="getGuahaoStatus" parameterType="String" resultType="Integer">
+        SELECT IFNULL(MAX(guahao_biaozhi), 0) AS
+                   guahao_biaozhi
+
+        FROM `omas`.`guahao`
+        WHERE patient_id = #{patientId}
+          AND guahao_id = (SELECT MAX(guahao_id) FROM guahao WHERE patient_id = #{patientId})
+    </select>
+
+    <select id="getDoctorByPatientId" resultType="com.fosustu.omas.pojo.Doctor">
+        SELECT `doc_id`,`doc_name` as docName,`sex`,`phone`,`synopsis`,`tile_id`,`apart_id`,`birthday`,`score`,`score_times`
+        FROM `omas`.`doctor`
+        WHERE doc_id = (
+            SELECT `doctor_id`
+            FROM guahao
+            WHERE patient_id = #{patientId}
+              AND guahao_biaozhi = 1);
+    </select>
+
+    <select id="getApartmentNameByPatientId" resultType="string">
+        SELECT apart_name
+        FROM apartment a
+                 NATURAL JOIN guahao b
+        WHERE patient_id = #{patientId}
+          AND b.guahao_biaozhi = 1;
+    </select>
+
+
+</mapper>

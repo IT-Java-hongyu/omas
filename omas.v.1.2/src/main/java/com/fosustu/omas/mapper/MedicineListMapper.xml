@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.MedicineListMapper" >
+  <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.MedicineList" >
+    <id column="list_id" property="listId" jdbcType="VARCHAR" />
+    <result column="pre_id" property="preId" jdbcType="VARCHAR" />
+    <result column="m_id" property="mId" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <insert id="saveMedicineList" parameterType="com.fosustu.omas.pojo.MedicineList">
+  	INSERT INTO `omas`.`medicine_list` (`pre_id`, `m_id`, `num`, `usage`)
+		VALUES
+		  ( #{preId}, #{mId}, #{num},#{usage});
+  </insert>
+  <select id="getMedicineList" parameterType="String" resultMap="BaseResultMap">
+     SELECT l.`m_id`,l.`num`,l.`pre_id`,l.`usage` FROM omas.`medicine_list` l,omas.`prescription` p 
+WHERE  p.`rec_id` =#{rec_id}  AND l.`pre_id` = p.`pre_id` 
+  </select>
+
+
+
+</mapper>

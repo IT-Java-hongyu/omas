@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.MedicineMapper" >
+  <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.Medicine" >
+    <id column="m_id" property="mId" jdbcType="VARCHAR" />
+    <result column="m_name" property="mName" jdbcType="VARCHAR" />
+    <result column="m_attend" property="mAttend" jdbcType="VARCHAR" />
+    <result column="m_usage" property="mUsage" jdbcType="VARCHAR" />
+    <result column="m_price" property="mPrice" jdbcType="DOUBLE" />
+    
+    <result column="m_img" property="medicineImg" jdbcType="DOUBLE" />
+  </resultMap>
+  
+  <select id="findMedicineByMedicineName" parameterType="String" resultMap="BaseResultMap">
+  	SELECT
+	  `m_id`,
+	  `m_name`,
+	  `m_attend`,
+	  `m_usage`,
+	  `m_price`,
+	  `m_img`
+	FROM
+	  `omas`.`medicine`
+	WHERE m_name LIKE "%"#{medicineName}"%"
+  </select>
+  <select id="findMedicineByMedicineSyptoms" parameterType="String" resultMap="BaseResultMap"> 
+	  	SELECT
+		  `m_id`,
+		  `m_name`,
+		  `m_attend`,
+		  `m_usage`,
+		  `m_price`,
+		  `m_img`
+		FROM
+		  `omas`.`medicine`
+		WHERE m_attend LIKE "%"#{syptomName}"%"
+  </select>
+  <select id="searchMedicineNameById" parameterType="String" resultMap="BaseResultMap">
+ 	  	SELECT
+		  `m_id`,
+		  `m_name`,
+		  `m_attend`,
+		  `m_usage`,
+		  `m_price`,
+		  `m_img`
+		FROM
+		  `omas`.`medicine`
+		   WHERE m_id =#{medicineId}
+  </select>
+
+
+</mapper>

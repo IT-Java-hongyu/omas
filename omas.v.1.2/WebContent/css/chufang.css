@@ -1,0 +1,41 @@
+.top_box{
+	width:100%;
+	height:80px;
+}
+.menzhen{
+	height:10px;
+	width:595px;
+	margin:auto;
+	padding-top:50px;
+}
+.big_box{
+	width:595px;
+	height:842px;
+	border:#999 solid 1px;
+	margin:auto;
+}
+.name{border-right:#999 solid 1px;border-bottom:#999 solid 1px;}
+.other{border-bottom:#999 solid 1px;}
+.other1{border-bottom:#999 solid 1px;}
+.paperbox{width:100%;}
+.paperbox td{width:20%;}
+.paperbox tr{height:50px;}
+.name1{border-bottom:#999 solid 1px;}
+
+.medicine_box{height:600px;}/*这一段是后面修改了高度*/
+.medicine_item{width:70%;margin:auto;}/*这一段是后面加的*/
+.medicine_item{text-align:center;}/*这一段是后面加的*/
+.medboth{height:590px;}
+.line{width:1px;height:80%;background-color:#999;margin:auto;margin-top:30px;margin-bottom:30px;}
+
+
+.bto_list{width:100%;}
+.bto_list td{border-bottom:#999 solid 1px;height:50px;}
+.last_box td{border:none;}
+
+.inputbox1{padding-top:-670px;height:80%;padding-left:30px;}
+.inputbox2{padding-top:-670px;height:80%;padding-right:30px;}
+
+.bto_box{height:50px;padding-top:10px;}
+.print{width:80px;height:25px;background-color:#969696;margin:auto;text-align:center;color:#fff;border-radius:4px;}
+.print_box{width:100%;text-align:center;}

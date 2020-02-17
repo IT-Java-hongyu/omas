@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>医生管理</title>
+    <link rel="stylesheet" type="text/css" href="ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="ui/themes/icon.css">
+    <script type="text/javascript" src="ui/jquery.min.js"></script>
+    <script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="ui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="ui/jquery.serializejson.min.js"></script>
+    <script type="text/javascript" src="js/crud.js"></script>
+    <script type="text/javascript" src="js/download.js"></script>
+    <script type="text/javascript">
+        var name = "doctor";
+        var objectId = "docId";
+        var columns = [[
+            {field: 'docId', title: '编号', width: 100},
+            {field: 'docName', title: '医生名称', width: 100},
+            {
+                field: 'sex', title: '性别', width: 100, formatter: function (value) {
+                    if (value == '1') return '男';
+                    else return '女';
+                }
+            },
+            {
+                field: 'birthday', title: '年龄', width: 100, formatter: function (value) {
+
+                    return jsGetAge(timestampToTime(value));
+                }
+            },
+            {field: 'phone', title: '电话号码', width: 100},
+            {field: 'synopsis', title: '简介', width: 100},
+            {field: 'tileName', title: '职称', width: 100},
+            {field: 'apartName', title: '科室', width: 100},
+			{field: 'score', title:'评分',width: 100},
+			{field: 'scoreTimes', title:'评价次数',width:100},
+
+            {
+                field: '-', title: '操作', width: 200, formatter: function (value, row, index) {
+                    return "<a href='#' onclick='edit(" + row.docId + ")'>修改</a> <a href='#' onclick='dele(" + row.docId + ")'>删除</a>";
+                }
+            }
+        ]];
+
+    </script>
+    <style type="text/css">
+        body {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            min-width: 1000px;
+            z-index: -10;
+            zoom: 1;
+            background-color: #fff;
+            background: url(images/houtaibg.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            -webkit-background-size: cover;
+            -o-background-size: cover;
+            background-position: center 0;
+
+
+        }
+    </style>
+
+</head>
+<body>
+<!-- <div class="easyui-panel">
+<form id="searchForm">
+	部门名称：<input name="t1.name" >
+	联系电话：<input name="t1.tele" >
+
+	<button type="button" id="btnSearch">查询</button>
+</form>
+</div> -->
+<table id="grid"></table>
+<div id="editWindow" class="easyui-window" title="部门编辑"
+     style="width: 300px;height: 300px" data-options="closed:true">
+    <form id="editForm">
+        <input name="docId" type="hidden">
+
+        <table>
+            <tr>
+                <td>编号</td>
+                <td><input name="docId"></td>
+            </tr>
+            <tr>
+                <td>医生名字</td>
+                <td><input name="docName"></td>
+            </tr>
+            <tr>
+                <td>性别</td>
+                <td><input name="sex"></td>
+            </tr>
+            <tr>
+                <td>年龄</td>
+                <td><input class="easyui-datebox" name="birthday"
+                           data-options="required:true,showSeconds:false" value="3/4/2010" style="width:150px"></td>
+            </tr>
+            <tr>
+                <td>电话号码</td>
+                <td><input name="phone"></td>
+            </tr>
+            <tr>
+                <td>简介</td>
+                <td><input name="synopsis"></td>
+            </tr>
+            <tr>
+                <td>职称</td>
+                <td><input name="tileId"></td>
+            </tr>
+            <tr>
+                <td>科室</td>
+                <td><input name="apartId"></td>
+            </tr>
+
+
+        </table>
+        <button id="btnSave" style="margin-left:100px;margin-top:10px" type="button">保存</button>
+    </form>
+</div>
+
+<div id="importDlg" style="padding:4px;">
+    <form id="importForm" enctype="multipart/form-data">
+        导入文件：<input type="file" name="file" style="border:1px solid #95B8E7"/>
+    </form>
+</div>
+
+</body>
+</html>

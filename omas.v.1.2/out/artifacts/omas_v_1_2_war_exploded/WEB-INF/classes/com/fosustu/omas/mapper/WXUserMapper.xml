@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.WXUserMapper" >
+  <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.WXUser" >
+    <id column="wxID" property="wxID" jdbcType="VARCHAR" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="sessionKey" property="sessionKey" jdbcType="VARCHAR" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="p_id" property="patientId" jdbcType="VARCHAR" />
+    <result column="tokenTime" property="tokenTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="getUserByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select * from wxuser where wxuser.openid =#{openid,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="InsertWXUserMsg" parameterType="com.fosustu.omas.pojo.WXUser">
+  	INSERT INTO omas.wxuser (wxID, openid,sessionKey,token,p_id,tokenTime)
+		VALUES
+		(#{wxID},#{openid},#{sessionKey},#{token},#{patientId},#{tokenTime});
+  </insert>
+  <update id="updateTakenTime" parameterType="com.fosustu.omas.pojo.Patient"> 
+  		UPDATE
+		  `omas`.`wxuser`
+		SET
+		  tokenTime = #{tokenTime}
+		WHERE openid = #{openid};
+
+  </update>
+    <update id="updateTaken" parameterType="com.fosustu.omas.pojo.Patient"> 
+  		UPDATE
+		  `omas`.`wxuser`
+		SET
+		  tokenTime = #{tokenTime},
+		  token = #{token}
+		WHERE openid = #{openid};
+  </update>
+    <select id="getUserByToken" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select * from omas.wxuser where token =#{token,jdbcType=VARCHAR}
+  </select>
+
+
+  
+</mapper>

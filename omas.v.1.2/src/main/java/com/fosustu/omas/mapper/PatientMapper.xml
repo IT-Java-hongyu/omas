@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.PatientMapper" >
+  <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.Patient" >
+    <id column="p_id" property="patientId" jdbcType="VARCHAR" />
+    <result column="p_name" property="patientName" jdbcType="VARCHAR" />
+    <result column="p_birthday" property="patientBirthday" jdbcType="INTEGER" />
+    <result column="p_sex" property="patientSex" jdbcType="INTEGER" />
+    <result column="p_address" property="patientAddress" jdbcType="VARCHAR" />
+    <result column="p_marriage" property="patientMarriage" jdbcType="INTEGER" />
+    <result column="p_phone" property="patientPhone" jdbcType="VARCHAR" />
+    <result column="p_email" property="patientEmail" jdbcType="VARCHAR" />
+    <result column="p_por" property="patientPor" jdbcType="VARCHAR" />
+    <result column="card_id" property="cardId" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+ 	<select id="listByPage" resultMap="BaseResultMap">
+  		SELECT
+		  `p_id`,
+		  `p_name`,
+		  `p_birthday`,
+		  `p_sex`,
+		  `p_address`,
+		  `p_marriage`,
+		  `p_phone`,
+		  `p_email`,
+		  `p_por`,
+		  `card_id`
+		FROM
+		  `omas`.`patient`
+
+		LIMIT #{currIndex}, #{rows};
+  </select>
+  
+  <select id="getAllPatient" resultMap="BaseResultMap">
+  	SELECT
+		  `p_id`,
+		  `p_name`,
+		  `p_birthday`,
+		  `p_sex`,
+		  `p_address`,
+		  `p_marriage`,
+		  `p_phone`,
+		  `p_email`,
+		  `p_por`,
+		  `card_id`
+		FROM
+		  `omas`.`patient`
+  </select>
+  
+  
+  <select id="getPatientById" parameterType="String" resultMap="BaseResultMap">
+  		select * from patient where p_id = #{id}
+  </select>
+  
+  <update id="updatePatientById" parameterType="com.fosustu.omas.pojo.Patient"> 
+  		UPDATE
+		  `omas`.`patient`
+		SET
+		  `p_id` = #{patientId},
+		  `p_name` = #{patientName},
+		  `p_birthday` = #{patientBirthday},
+		  `p_sex` = #{patientSex},
+		  `p_address` = #{patientAddress},
+		  `p_marriage` = #{patientMarriage},
+		  `p_phone` = #{patientPhone},
+		  `p_email` = #{patientEmail},
+		  `p_por` = #{patientPor},
+		  `card_id` = #{cardId}
+		WHERE `p_id` = #{patientId};
+
+  </update>
+  
+  <delete id="deletePatientById" parameterType="com.fosustu.omas.pojo.Patient">
+  		DELETE
+		FROM
+		  `omas`.`patient`
+		WHERE `p_id` = #{patientId};
+  </delete>
+  
+  <insert id="addPatient" parameterType="com.fosustu.omas.pojo.Patient">
+  		INSERT INTO `omas`.`patient` (
+		  `p_id`,
+		  `p_name`,
+		  `p_birthday`,
+		  `p_sex`,
+		  `p_address`,
+		  `p_marriage`,
+		  `p_phone`,
+		  `p_email`,
+		  `p_por`,
+		  `card_id`
+		)
+		VALUES
+		  (
+		  #{patientId},
+		  #{patientName},
+		  #{patientBirthday},
+		  #{patientSex},
+		  #{patientAddress},
+		  #{patientMarriage},
+		  #{patientPhone},
+		  #{patientEmail},
+		  #{patientPor},
+		  #{cardId}
+		  );
+
+  </insert>
+  
+  <select id="getCount" resultType="Integer">
+  		SELECT COUNT(*) FROM patient
+  </select>
+  
+  <insert id="InsertPatient" parameterType="String">
+  		INSERT INTO `omas`.`patient` (`p_id`) VALUES (#{patientId});
+  </insert>
+  
+  <select id="getPatientCardById" parameterType="String" resultType="string">
+  		SELECT card_id FROM patient 
+			WHERE p_id = #{patientId};
+  </select>
+  <update id="updataCardId" parameterType="com.fosustu.omas.pojo.CardInform">
+	  UPDATE patient SET card_id = #{cardId}  
+		WHERE p_id = #{patientId};
+  </update>
+</mapper>

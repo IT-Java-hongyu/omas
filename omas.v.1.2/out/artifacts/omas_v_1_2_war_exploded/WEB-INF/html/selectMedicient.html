@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="css/firstpage.css">
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<script type="text/javascript" src="ui/jquery.min.js"></script>
+	<script type="text/javascript" src="js/mengzheng.js"></script>
+</head>
+<body>
+<!--头部导航栏开始-->
+<div class="topbox">
+<div class="leftarea">
+	<div class="logobox fl">
+		<a href="#"><img src="image/logo.png"></a>
+	</div>
+	</div>
+<div class="rightarea">
+    <div class="searchbox fr">
+	<input id="medicineSearchInput" type="text" class="textbox"  placeholder="请输入需要搜索的药物..."></input>
+	<input type="buttun" class="butbox" onclick="findMedicine()" value="搜 索"></input>
+</div>
+</div>
+</div>
+<!--头部导航栏结束-->
+
+<!--中间推荐药物列表开始-->
+<div class="centerbox">
+	<div id="medicineList" class="medicine_list clearfix">
+
+<!--一个药物展示开始-->
+	
+
+	
+
+</div>
+</div>
+<!--中间推荐药物列表结束-->
+
+</br>
+</br>
+
+
+<!--已选药物列表头部开始-->
+<div class="optioned_box clearfix">
+<div class="wenzi_box clearfix">已选药物列表：</div>
+<div class="newbut_box clearfix">
+	
+</div>
+</div>
+<!--已选药物列表头部结束-->
+
+<!--已选药物列表开始-->
+<div class="table_box">
+<form>
+<table id="syptomsTable" border="0" class="t_table"cellspacing="0" cellpadding="0">
+<tr>
+<th>药物名</th>
+<th>用量</th>
+<th>用法</th>
+<th>操作</th>
+</tr>
+	
+	
+
+
+	
+</table>
+</form>
+
+<!--已选药物列表开结束-->
+</div>
+
+<!--输入诊断结果-->
+<div class="input_box">
+<div class="input_text">
+	<textarea rows="50px" id="zengduanResult" cols="30px" class="input_item" placeholder="请输入诊断结果..."></textarea>
+	<div class="save_box">
+	<input type="buttun" class="bewbt" onclick="saveMedicine()"  value="生成处方"></input>
+	</div>
+</div>
+</div>
+<!--输入诊断结果-->
+
+<div class="e"  style=" bottom:0; margin-top:13%;
+background-color:#0076c7;height:30px;width:100%;color:#ffffff;padding-top:10px;text-align:center;">
+	<p>客服热线：0757-12345678 ©2019-现在menzhen.com版权所有</p>
+</div>
+</body>
+</html>

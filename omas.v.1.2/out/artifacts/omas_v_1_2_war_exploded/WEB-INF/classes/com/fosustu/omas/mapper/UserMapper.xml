@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.fosustu.omas.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.User" >
+    <id column="userID" property="userid" jdbcType="VARCHAR" />
+    <result column="userName" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    
+    <result column="userDetailId" property="userDetailId" jdbcType="VARCHAR" />
+    <collection property="roles"
+                ofType="com.fosustu.omas.pojo.Role"
+                select="com.fosustu.omas.mapper.UserMapper.getAllRoles" 
+                column="userID" 
+                                       
+                />
+          
+  </resultMap>
+  
+  <resultMap id="MenuMap" type="com.fosustu.omas.pojo.Menu" >
+    <id column="menuID" property="menuid" jdbcType="VARCHAR" />
+    <result column="menuname" property="menuname" jdbcType="VARCHAR" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+ </resultMap>  
+   <resultMap id="RoleMap" type="com.fosustu.omas.pojo.Role" >
+    <id column="roleID" property="roleid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+        <collection property="menus"
+                ofType="com.fosustu.omas.pojo.Menu"
+                select="com.fosustu.omas.mapper.UserMapper.getAllMenus" 
+                column="roleID" 
+                                       
+                />
+  </resultMap>
+  
+  <select id="getAllRole" resultMap="RoleMap"  >
+  		  SELECT b.* FROM USER a JOIN role b ON a.userID=b.roleID
+  </select>
+  <select id="getAllRoles" resultMap="RoleMap" parameterType="java.lang.String" >
+  		  SELECT b.* FROM USER a JOIN role b ON a.userID=b.roleID WHERE userID = #{userid,jdbcType=VARCHAR}
+  </select>
+   <select id="getAllMenus" resultMap="MenuMap" parameterType="java.lang.String" >
+  		SELECT c.* FROM USER a  JOIN role b  JOIN menu c ON a.`userID`=b.`roleID`  WHERE menuID IN (SELECT menuID FROM role_menu WHERE roleID =userID)  AND userID =#{userid,jdbcType=VARCHAR}
+  		
+  </select>
+  
+  
+  <select id="getRoleAndMenuByUser" resultMap="BaseResultMap" parameterType="java.lang.String">
+  		select 
+	    	userID, userName
+	    from user
+	    where userID = #{userid,jdbcType=VARCHAR}
+  </select>
+ 
+ <select id="getRole" resultMap="RoleMap" parameterType="java.lang.String">
+ 	select 
+	    	roleID, name
+	    from role
+	    where roleID = #{userid,jdbcType=VARCHAR}
+ </select>
+ 
+  <select id="getMenu" resultMap="MenuMap" parameterType="java.lang.String">
+ 	select 
+	    	menuID, menuname,icon,url
+	    from menu
+	    where menuID = #{id,jdbcType=VARCHAR}
+ </select>
+ <select id="getRolesbyUserId" resultType="com.fosustu.omas.pojo.Role" parameterType="java.lang.String">
+ 	SELECT
+	  `roleID`,
+	  `name`
+	FROM
+	  `omas`.`role`
+	WHERE roleID IN (SELECT roleID FROM user_role WHERE userID= #{userid,jdbcType=VARCHAR})
+ </select>
+ 
+ <select id="getUserList" resultType="com.fosustu.omas.pojo.User">
+ 	select 
+    userID, userName
+    from user
+ </select>
+ 	
+  <sql id="Base_Column_List" >
+    userID, userName, password
+  </sql>
+ 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userID = #{userid,jdbcType=VARCHAR}
+  </select>
+  <update id="updatePassword" parameterType="String">
+  	UPDATE
+	  `omas`.`user`
+	SET
+	  
+	  `password` = #{1}
+	WHERE `userID` = #{0};
+  </update>
+  
+  <!-- 当只传一个参数到sql语句时，可以直接写参数名，当传多个参数时，应当这样写(多个参数已#{0}开始) -->
+  <select id="findByUsernameAndPwd" resultMap="BaseResultMap" parameterType="map" >
+    select 
+      *
+    from user
+    where 1=1
+    <if test="userid != null">and userId=#{userid}</if>
+    <if test="username != null">and userName=#{username}</if>
+    
+    <if test="password != null">and password=#{password}</if>
+  </select>
+
+
+
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.TrackingMapper" >
+  <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.Tracking" >
+    <id column="des_id" property="desId" jdbcType="VARCHAR" />
+    <result column="p_id" property="pId" jdbcType="VARCHAR" />
+    <result column="rec_id" property="recId" jdbcType="VARCHAR" />
+    <result column="des_date" property="desDate" jdbcType="TIMESTAMP" />
+    <result column="symptom" property="symptom" jdbcType="VARCHAR" />
+    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insertTrack" parameterType="Tracking">
+   insert into tracking(des_id,p_id,rec_id,des_date,symptom,status)
+   values(#{desId},#{pId},#{recId},#{desDate},#{symptom},#{status})
+  </insert>
+  
+  <select id="SearchNewest" parameterType="Tracking" resultMap="BaseResultMap">
+  select * from tracking
+  <where>
+      p_id = #{pId}
+  and rec_id=#{recId}
+  and status =#{status}
+  </where>
+ order by des_date desc  limit 1
+  </select>
+  <update id="UpdateTrack">
+  update tracking set des_date=#{desDate} , symptom =#{symptom}
+  <where>
+      p_id = #{pId}
+  and rec_id=#{recId}
+  and status =#{status}  
+  </where>
+  </update>
+
+
+</mapper>

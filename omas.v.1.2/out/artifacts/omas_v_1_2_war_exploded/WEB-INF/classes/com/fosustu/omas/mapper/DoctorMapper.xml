@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.DoctorMapper">
+    <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.Doctor">
+        <id column="doc_id" property="docId" jdbcType="VARCHAR"/>
+        <result column="doc_name" property="docName" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="birthday" property="birthday" jdbcType="DATE"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="synopsis" property="synopsis" jdbcType="VARCHAR"/>
+        <result column="tile_id" property="tileId" jdbcType="VARCHAR"/>
+        <result column="title_name" property="tileName" jdbcType="VARCHAR"/>
+        <result column="apart_id" property="apartId" jdbcType="VARCHAR"/>
+        <result column="apart_name" property="apartName" jdbcType="VARCHAR"/>
+        <result column="score" property="score" jdbcType="VARCHAR" />
+        <result column="score_times" property="scoreTimes" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="SearchDocListByTitle" parameterType="InputForSearchDoctor" resultMap="BaseResultMap">
+        SELECT distinct
+        d.doc_id,d.doc_name,d.sex,d.birthday,d.phone,d.synopsis,d.tile_id,d.apart_id,d.title_name,a.apart_name
+        FROM apartment a,
+        (SELECT distinct d.doc_id,d.doc_name,d.sex,d.birthday,d.phone,d.synopsis,d.tile_id,d.apart_id,d.title_name
+        FROM
+        (SELECT d.doc_id,d.doc_name,d.sex,d.birthday,d.phone,d.synopsis,d.tile_id,d.apart_id,t.title_name
+        FROM doctor d
+
+        left join title t
+        on t.title_id = d.tile_id
+        <if test="title.titleId !=null and title.titleId !=''">
+            <where>
+                t.title_id= #{title.titleId}
+            </where>
+        </if>
+        ) d
+        left join visit_time v
+        on v.doc_id = d.doc_id
+        <if test="date!=null">
+            <where>
+                v.date >= #{date}
+            </where>
+            order by v.date
+        </if>
+        ) d
+        <where>
+            a.apart_id=d.apart_id
+            <if test="apartment !=null and apartment.apartId!=null">
+                and d.apart_id =#{apartment.apartId}
+            </if>
+
+            <if test="symptoms !=null and symptoms!=''">
+                and d.synopsis like concat('%','${symptoms}','%')
+                order by replace(d.synopsis,'${symptoms}','')
+            </if>
+
+        </where>
+
+    </select>
+    <select id="listByPage" resultMap="BaseResultMap">
+        SELECT `doc_id`,
+               `doc_name`,
+               `sex`,
+               `phone`,
+               `synopsis`,
+               b.`title_name`,
+               c.`apart_name`,
+               `birthday`,
+               `score`,
+               `scoreTimes`
+        FROM doctor a
+                 JOIN title b
+                 JOIN apartment c
+        WHERE a.`tile_id` = b.`title_id`
+          AND a.`apart_id` = c.`apart_id`
+        LIMIT #{currIndex}, #{rows};
+    </select>
+    <select id="getDoctorById" parameterType="String" resultMap="BaseResultMap">
+        select *
+        from doctor
+        where doc_id = #{id}
+    </select>
+
+    <update id="updateDoctorById" parameterType="com.fosustu.omas.pojo.Doctor">
+        UPDATE
+            `omas`.`doctor`
+        SET `doc_id`   = #{docId},
+            `doc_name` = #{docName},
+            `sex`      = #{sex},
+            `phone`    = #{phone},
+            `synopsis` = #{synopsis},
+            `tile_id`  = #{tileId},
+            `apart_id` = #{apartId},
+            `birthday` = #{birthday}
+        WHERE `doc_id` = #{docId};
+    </update>
+
+    <update id="updateDoctorScoreById" parameterType="com.fosustu.omas.pojo.Doctor">
+        UPDATE
+            `omas`.`doctor`
+        SET `score`=#{score},
+            `score_times`=#{scoreTimes}
+        WHERE `doc_id` = #{docId};
+    </update>
+
+    <delete id="deleteDoctorById" parameterType="com.fosustu.omas.pojo.Doctor">
+        DELETE
+        FROM `omas`.`doctor`
+        WHERE `doc_id` = #{docId}
+    </delete>
+
+    <insert id="addDoctor" parameterType="com.fosustu.omas.pojo.Doctor">
+        INSERT INTO `omas`.`doctor` (`doc_id`,
+                                     `doc_name`,
+                                     `sex`,
+                                     `phone`,
+                                     `synopsis`,
+                                     `tile_id`,
+                                     `apart_id`,
+                                     `birthday`)
+        VALUES (#{docId},
+                #{docName},
+                #{sex},
+                #{phone},
+                #{synopsis},
+                #{tileId},
+                #{apartId},
+                #{birthday})
+    </insert>
+
+    <select id="getCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM doctor a
+                 JOIN title b
+                 JOIN apartment c
+        WHERE a.`tile_id` = b.`title_id`
+          AND a.`apart_id` = c.`apart_id`
+    </select>
+
+    <select id="getDoctorByAprtId" parameterType="String" resultMap="BaseResultMap">
+        SELECT `doc_id`,
+               `doc_name`,
+               `sex`,
+               `phone`,
+               `synopsis`,
+               `tile_id`,
+               `apart_id`,
+               `birthday`,
+               `score`,
+               `score_times`
+        FROM `omas`.`doctor`
+        where apart_id = #{apartId}
+    </select>
+    <select id="getAllDoctor" parameterType="String" resultMap="BaseResultMap">
+        SELECT `doc_id`,
+               `doc_name`,
+               `sex`,
+               `phone`,
+               `synopsis`,
+               `tile_id`,
+               `apart_id`,
+               `birthday`,
+               `score`,
+               `score_times`
+        FROM `omas`.`doctor`
+    </select>
+    <select id="getAllDoctorToExcel" resultMap="BaseResultMap">
+        SELECT `doc_id`,
+               `doc_name`,
+               `sex`,
+               `phone`,
+               `synopsis`,
+               b.`title_name`,
+               c.`apart_name`,
+               `birthday`,
+               `score`,
+               `score_times`
+        FROM doctor a
+                 JOIN title b
+                 JOIN apartment c
+        WHERE a.`tile_id` = b.`title_id`
+          AND a.`apart_id` = c.`apart_id`
+    </select>
+    <select id="getAlldoctorInformation" resultMap="BaseResultMap">
+        SELECT d.doc_id,
+               d.doc_name,
+               d.sex,
+               d.birthday,
+               d.phone,
+               d.synopsis,
+               d.tile_id,
+               d.apart_id,
+               a.apart_name,
+               t.title_name
+        FROM doctor AS d
+                 INNER JOIN apartment AS a
+                 INNER JOIN title AS t
+        WHERE a.apart_id = d.apart_id
+          AND t.title_id = d.tile_id
+    </select>
+
+</mapper>

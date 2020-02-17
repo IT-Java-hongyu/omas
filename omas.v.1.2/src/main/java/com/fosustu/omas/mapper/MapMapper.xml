@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.MapMapper" >
+  <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.Maps" >
+    <id column="mapid" property="mapid" jdbcType="VARCHAR" />
+    <result column="startpoint" property="startpoint" jdbcType="VARCHAR" />
+    <result column="endpoint" property="endpoint" jdbcType="VARCHAR"/>
+    <result column="url" property="url" jdbcType="VARCHAR"/>
+  </resultMap>
+  <select id="searchMap" parameterType="com.fosustu.omas.pojo.Maps" resultType="com.fosustu.omas.pojo.Maps">
+  	select * from map where startpoint=#{startpoint} and endpoint=#{endpoint}
+  </select>
+
+
+</mapper>

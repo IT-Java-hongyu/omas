@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.PrescriptionMapper" >
+  <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.Prescription" >
+    <id column="pre_id" property="preId" jdbcType="VARCHAR" />
+    <result column="date" property="date" jdbcType="TIMESTAMP" />
+    <result column="fee" property="fee" jdbcType="DOUBLE" />
+    <result column="list_id" property="listId" jdbcType="VARCHAR" />
+    <result column="rec_id" property="recId" jdbcType="VARCHAR" />
+    
+    <result column="p_id" property="pid" jdbcType="VARCHAR" />
+    <result column="p_name" property="patientname"  jdbcType="VARCHAR"/>
+    <result column="p_sex" property="patientSex"  />
+    <result column="p_birthday" property="patientBirthday" jdbcType="VARCHAR" />
+    
+    
+    
+    <collection property="chufanMedicineList" ofType="com.fosustu.omas.pojo.ChufanMedicineList"
+    	select="com.fosustu.omas.mapper.PrescriptionMapper.getChufanMedicineList" column="{pid=p_id,recId=rec_id}" 
+    >
+    	
+    </collection>
+  </resultMap>
+  <resultMap type="com.fosustu.omas.pojo.ChufanMedicineList" id="medicineMap1">
+  		<id column="pre_id" property="preId" jdbcType="VARCHAR" />
+  		<result column="m_name" property="medicineName"  jdbcType="VARCHAR"/>
+    	<result column="num" property="medicineNum" />
+    	<result column="usage" property="medicineUsage"  jdbcType="VARCHAR"/>
+  </resultMap>
+    <select id="getChufangMedicineList" parameterType="String" resultMap="BaseResultMap">
+  		SELECT DISTINCT b.`rec_id`,a.p_id,b.`pre_id`,a.`p_name`,a.`p_sex`,a.`p_birthday` ,
+  		b.`date`,b.`fee`,b.`pharmacy`,b.`zengduanResult`
+  		FROM patient a JOIN prescription b JOIN medicine_list c 
+  		JOIN medicine d WHERE a.p_id = #{0} 
+  		AND b.`rec_id`=#{1} 
+  		AND b.`pre_id` = c.`pre_id` AND c.`m_id` =d.`m_id`
+  </select>
+  
+  <select id="getChufanMedicineList" parameterType="com.fosustu.omas.pojo.Prescription" resultMap="medicineMap1">
+  	SELECT b.`pre_id`,c.`num`,c.`usage`,d.`m_name` 
+  		FROM patient a JOIN prescription b JOIN medicine_list c 
+  		JOIN medicine d WHERE a.p_id = #{pid} 
+  		AND b.`rec_id`=#{recId} 
+  		AND b.`pre_id` = c.`pre_id` AND c.`m_id` =d.`m_id`
+  </select>
+  
+  <insert id="saveChufang" parameterType="com.fosustu.omas.pojo.Prescription">
+  		INSERT INTO `omas`.`prescription` (
+			  `pre_id`,
+			  `date`,
+			  `fee`,
+			  `rec_id`,
+			  `pharmacy`,
+			  `zengduanResult`
+			)
+			VALUES
+			  (
+			    #{preId},
+			    #{date},
+			    #{fee},
+			    #{recId},
+			    #{pharmacy},
+			    #{ZengduanResult}
+			  );
+  </insert>
+  
+
+
+
+</mapper>

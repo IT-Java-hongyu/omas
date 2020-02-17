@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.UserRoleMapper">
+    <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.UserRole">
+        <result column="userID" property="userid" jdbcType="VARCHAR"/>
+        <result column="roleID" property="roleid" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="addUserRole" parameterType="com.fosustu.omas.pojo.UserRole">
+        INSERT INTO `omas`.`user_role` (`userID`, `roleID`)
+        VALUES (#{userid}, #{roleid});
+    </insert>
+    <delete id="deleteUserRole" parameterType="String">
+        DELETE
+        FROM `omas`.`user_role`
+        WHERE `userID` = #{userid};
+
+    </delete>
+
+
+</mapper>

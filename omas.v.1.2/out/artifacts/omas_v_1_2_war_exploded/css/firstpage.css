@@ -1,0 +1,95 @@
+*{
+	margin:0;
+	padding:0;
+	list-style:none;
+	text-decoration:none;
+}
+a{text-decoration:none;color:#808080;}
+
+.fl{float:left;}
+.fr{float:right;}
+/*清浮动*/
+.clearfix:after{content:"";display:block;clear:both;}
+.clearfix{zoom:1;}
+
+.f1{border-left:#999 solid 1px;}
+.panel{padding-top:-200px;}
+
+/*清浮动*/
+.clearfix:after{content:"";display:block;clear:both;}
+.clearfix{zoom:1;}
+
+.topbox{
+	height:80px;
+	padding-top:15px;
+}
+.searchbox{
+	padding-right:20px;
+	padding-top:30px;
+}
+.textbox{
+	width:300px;
+    height:30px;
+    background-color:#DDDDDD;
+    color:#969696;
+    box-shadow: 1px 2px  2px #0076c7;
+}
+.butbox{
+	width:60px;
+	height:30px;
+	text-align: center;
+    background-color:#f5b519;
+    color:#ffffff;
+    box-shadow: 1px 2px  2px #0076c7;
+}
+.logobox{
+	padding-left:30px;
+}
+.centerbox{padding-top:30px;width:80%;margin:auto;}
+.medicine_list{}
+.medicine_item{
+text-align:center;
+float:left;
+width:20%;
+border-right:#999 solid 1px;
+border-top:#999 solid 1px;
+border-bottom:#999 solid 1px;
+margin-right:-4px; overflow:hidden;padding:0 1px;}
+.medicine_item a:hover{color:red;}
+.medicine_item p{line-height:20px;}
+.medicinebox img{width:90%;}
+.optioned_top{height:50px;}
+.nbtn{
+	background-color:#0076c7;
+	color:#ffffff;
+	width:80px;
+	height:30px;
+	text-align:center;
+	float:right;
+}
+.p1{width:120px;}
+.newadd_btn{height:35px;}
+
+.optioned_box{height:40px;padding-top:20px;}
+.wenzi_box{float:left;padding-left:10%;font-size:15px;padding-top:8px;}
+.newbut_box{float:right;padding-right:10%;padding-top:8px;}
+.bewbt{background-color:#169BD5;color:#ffffff;width:80px;text-align:center;border-radius:4px;height:25px;}
+
+.table_box{width:80%;margin:auto;}
+.t_table th,td{text-align:center;width:25%;border-collapse:collapse;border:#999 solid 1px;height:30px;}
+.t_table{width:100%;}
+.t_table td{}
+.t_table th{background-color:#0076c7;color:#ffffff;}
+
+.editbtu{width:40px;background-color:#169BD5;color:#ffffff;border-radius:4px;text-align:center;margin-right:4px;height:20px;}
+.dlebtu{width:40px;background-color:#169BD5;color:#ffffff;border-radius:4px;text-align:center;height:20px;}
+.bot_box{width:100%;}
+.bottom{position:fixed; bottom:0; margin-top:50px;
+background-color:#0076c7;height:30px;width:100%;color:#ffffff;padding-top:10px;text-align:center;}
+
+
+.input_item{width:100%;height:80px;border:#999 solid 1px;}
+.input_text{width:80%;margin:auto;}
+.input_box{width:100%;margin-top:50px;}
+.save_box{width:100%;text-align:center;padding-top:5px;}
+.save_res{width:100px;height:28px;text-align:center;background-color:#169BD5;border-radius:6px;color:#ffffff;}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.SymptomsMapper" >
+  <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.Symptoms" >
+    <id column="sym_id" property="symId" jdbcType="VARCHAR" />
+    <result column="rec_id" property="recId" jdbcType="VARCHAR" />
+    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="start_degree" property="startDegree" jdbcType="VARCHAR" />
+    <result column="now_degree" property="nowDegree" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="SearchSymptoms" parameterType="String" resultMap="BaseResultMap">
+      SELECT * FROM symptoms s
+     <where>
+ 	 s.rec_id = #{rec_id}
+ 	 </where>
+  </select>
+  <update id="UpdateSymptoms" parameterType="Symptoms">
+   update symptoms s set s.now_degree=#{nowDegree}
+   <where>
+   s.sym_id = #{symId}
+   </where>
+  </update>
+  
+  <insert id="saveSymptoms" parameterType="com.fosustu.omas.mapper.SymptomsMapper">
+  		INSERT INTO `omas`.`symptoms` (
+		  `sym_id`,
+		  `rec_id`,
+		  `desc`,
+		  `start_degree`,
+		  `now_degree`
+		)
+		VALUES
+		  (
+		    #{symId},
+		    #{recId},
+		    #{desc},
+		    #{startDegree},
+		    ' '
+		  );
+  </insert>
+
+
+</mapper>

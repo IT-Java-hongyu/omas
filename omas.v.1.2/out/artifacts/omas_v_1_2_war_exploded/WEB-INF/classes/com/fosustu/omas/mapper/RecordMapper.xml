@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fosustu.omas.mapper.RecordMapper" >
+  <resultMap id="BaseResultMap" type="com.fosustu.omas.pojo.Record" >
+    <id column="rec_id" property="recId" jdbcType="VARCHAR" />
+    <result column="p_id" property="pId" jdbcType="VARCHAR" />
+    <result column="doc_id" property="docId" jdbcType="VARCHAR" />
+    <result column="date" property="date" jdbcType="TIMESTAMP" />
+    
+    <result column="desc_detail" property="descDetail" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  
+   <select id="SearchNewRecord" parameterType="String" resultMap="BaseResultMap">
+    SELECT * FROM record r
+  <where>
+ 	 r.p_id=#{pid} 
+  </where>
+ 	order by r.date desc  limit 1
+  </select> 
+  
+  <insert id="saveRecord" parameterType="com.fosustu.omas.pojo.Record">
+  	INSERT INTO `omas`.`record` (
+	  `rec_id`,
+	  `p_id`,
+	  `doc_id`,
+	  `date`,
+	  `status`,
+	  `desc_detail`
+	)
+	VALUES
+	  (
+	    #{recId},
+	    #{pId},
+	    #{docId},
+	    #{date},
+	    #{status},
+	    #{descDetail}
+	  );
+  </insert>
+
+
+</mapper>

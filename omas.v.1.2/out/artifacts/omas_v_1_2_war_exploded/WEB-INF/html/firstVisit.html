@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>初诊信息录入</title>
+<link rel="stylesheet" type="text/css" href="ui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="ui/themes/icon.css">
+
+<link rel="stylesheet" type="text/css" href="css/firstVisit.css">
+<script type="text/javascript" src="ui/jquery.min.js"></script>
+<script type="text/javascript" src="ui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="ui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="ui/jquery.serializejson.min.js"></script>
+<script type="text/javascript" src="js/crud.js"></script>
+<script type="text/javascript" src="js/firtsVisit.js" ></script>
+
+<style type="text/css">
+.t_table th,td{text-align:center;width:25%;border-collapse:collapse;border:#999 solid 1px;height:30px;}
+.t_table{width:700px;}
+.t_table td{}
+.t_table th{background-color:#0076c7;color:#ffffff;}
+.editbtu{width:40px;background-color:#169BD5;color:#ffffff;border-radius:4px;text-align:center;margin-right:4px;height:20px;}
+</style>
+    
+<script type="text/javascript">
+	function jiaohao(){
+		
+		
+		//alert("hello");
+		$.ajax({
+		url: 'FirstVisitController/jiaohao',
+		
+		dataType: 'json',
+		type: 'post',
+		success:function(rtn){
+			//叫号成功
+			if(rtn.success==false) 
+				$.messager.alert("提示",rtn.message,'info',function(){
+					//刷新表格数据
+					//$('#grid').datagrid('reload');
+				});
+			$("#patientName").empty("");
+			$("#patientSex").empty("");
+			$("#patientAge").empty("");
+			$("#guahaoNum").empty("");
+			
+			
+			var jsons = JSON.parse(rtn.message);
+			var sexInt = jsons.patientSex;
+			var sex =" ";
+			if(sexInt=='1') sex="男";
+			else sex="女";
+			
+			var birthday = jsons.patientBirthday;
+
+		    //_________________       计算年龄      ___________
+			var returnAge;
+		    var strBirthdayArr=birthday.split("-");
+		    var birthYear = strBirthdayArr[0];
+		    var birthMonth = strBirthdayArr[1];
+		    var birthDay = strBirthdayArr[2];
+		    
+		    d = new Date();
+		    var nowYear = d.getFullYear();
+		    var nowMonth = d.getMonth() + 1;
+		    var nowDay = d.getDate();
+		    
+		    if(nowYear == birthYear){
+		        returnAge = 0;//同年 则为0岁
+		    }
+		    else{
+		        var ageDiff = nowYear - birthYear ; //年之差
+		        if(ageDiff > 0){
+		            if(nowMonth == birthMonth) {
+		                var dayDiff = nowDay - birthDay;//日之差
+		                if(dayDiff < 0)
+		                {
+		                    returnAge = ageDiff - 1;
+		                }
+		                else
+		                {
+		                    returnAge = ageDiff ;
+		                }
+		            }
+		            else
+		            {
+		                var monthDiff = nowMonth - birthMonth;//月之差
+		                if(monthDiff < 0)
+		                {
+		                    returnAge = ageDiff - 1;
+		                }
+		                else
+		                {
+		                    returnAge = ageDiff ;
+		                }
+		            }
+		        }
+		        else
+		        {
+		            returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
+		        }
+		    }
+		    //_________________       计算年龄      ___________
+			
+			
+			
+			$("#patientName").append(jsons.patientName);
+			$("#patientSex").append(sex);
+			$("#patientAge").append(returnAge);
+			$("#guahaoNum").append(jsons.guahaoNum);
+			
+			var $html= `<input id="patient" type="hidden" name="paientId" value=`+jsons.patientId+` >`;
+
+			$("#ZZform").append($html);
+		}
+	});
+		
+		
+	}
+</script>    
+</head>
+<body >
+
+<!--头部导航栏开始-->
+<div class="topbox" >
+	<div class="leftarea">
+		<div class="logobox fl">
+			<a href="#"><img src="image/logo.png"></a>
+		</div>
+	</div>
+	<div style="width:100%"><input style="margin-bottom:20px; margin-left:80%; height:25px;width:100px;background-color:#0076c7;color:#fff; " type="button" onclick="jiaohao()" value="叫号"></div>
+</div>
+
+<!-- 叫号显示病人信息 -->
+
+
+<div id="content" >
+
+<h2 align="center">病人基本信息</h2>
+<table id="messageTable" style="border: 1px;margin-left:250px;margin-bottom:40px" width="700px" cellpadding="5" cellspacing="0" >
+   <tr>
+		        <td style="background:#0076c7;">挂号码</td>
+		        <td id="guahaoNum" style="background:#fff;"></td>
+		        <td style="background:#0076c7;">姓名</td>
+		        <td id="patientName" style="background:#fff;"></td>
+		        
+		    </tr>
+		    <tr>
+		        <td  style="background: #0076c7;">年龄</td>
+		        <td id="patientAge"></td>
+		        <td style="background: #0076c7;">性别</td>
+		        <td id="patientSex"  style="background: #fff;"></td>
+		    </tr>
+    
+</table>
+
+
+
+<div  style="width:100%;height:100%;margin-left:250px;">
+	<p><h3 >症状录入：</h3></p>
+	<form id="ZZform" action="" >
+		
+		<table id ="ex" border="0" class="t_table"cellspacing="0" cellpadding="0">
+			<tr>
+			<th>症状</th>
+			<th>严重程度</th>
+			</tr>
+			<tr>
+			<td><input  style="width:99%;height:20px" type="text" id="zhengzhuang1"/></td>
+			<td><input  style="width:99%;height:20px" type="text" id="cd1"/></td>
+		 	</tr>
+		</table>
+		<div>
+			<input style="display:inline-block;margin-left:45%;margin-top:10px;width:50px;height:20px;" type="buttun" value="添加" onclick="add()" class="editbtu fl"/>
+			
+		</div>
+		<br/>
+		<br/>
+		<div class="abnormal">
+		    <p><h3 >症状详细信息录入：</h3></p>
+		    <div><textarea id="textArea" name="zhengzhuangDetails" placeholder="在此输入病症信息"></textarea></div>
+		    <br>
+		   <div style="width: 700px;text-align:center">
+		   <a id="btn" href="#" onclick="saveBZ()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">提交</a>
+		   <a id="btn" style="margin-left: 10px;" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-redo'">重置</a></div>
+		</div>
+	</form>
+</div>
+
+
+</div>
+<div class="e"  style=" bottom:0; margin-top:14%;
+background-color:#0076c7;height:50px;width:100%;color:#ffffff;padding-top:10px;text-align:center;vertical-align: middle;">
+	<p>客服热线：0757-12345678 ©2019-现在menzhen.com版权所有</p>
+</div>
+</body>
+</html>
